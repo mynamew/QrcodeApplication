@@ -13,35 +13,35 @@ import android.widget.Toast;
 import com.timi.zxingscanlibrary.CommonScanActivity;
 import com.timi.zxingscanlibrary.utils.Constant;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
 
     public void onClick(View view) {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            //权限还没有授予，需要在这里写申请权限的代码
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 60);
-        } else {
-            //权限已经被授予，在这里直接写要执行的相应方法即可
-            Intent intent = new Intent(this, CommonScanActivity.class);
-            intent.putExtra(Constant.REQUEST_SCAN_MODE, Constant.REQUEST_SCAN_MODE_ALL_MODE);
-            startActivityForResult(intent, 0);
-        }
+        scan(0, new ScanQRCodeResultListener() {
+            @Override
+            public void scanSuccess(int requestCode, String result) {
+                Toast.makeText(MainActivity.this,result,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                Toast.makeText(MainActivity.this, bundle.getString("result"), Toast.LENGTH_SHORT).show();
-            }
-        }
+    public int setLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void initBundle(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+
     }
 }
